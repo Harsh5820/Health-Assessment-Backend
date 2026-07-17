@@ -2,8 +2,8 @@
 	"info": {
 		"_postman_id": "ab12c345-67de-89fa-0123-456789abcdef",
 		"name": "Healthcare Dashboard API",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "12345678"
+		"description": "Complete collection of the MERN Patient Health Assessment & AI Wellness API.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"admin@healthcare.com\",\n    \"password\": \"password123\"\n}",
+							"raw": "{\n    \"email\": \"admin@example.com\",\n    \"password\": \"adminpassword\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -34,11 +34,10 @@
 								"login"
 							]
 						}
-					},
-					"response": []
+					}
 				},
 				{
-					"name": "Get Me",
+					"name": "Get Me (Profile)",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -59,8 +58,7 @@
 								"me"
 							]
 						}
-					},
-					"response": []
+					}
 				}
 			]
 		},
@@ -68,7 +66,7 @@
 			"name": "Admin",
 			"item": [
 				{
-					"name": "Get Users",
+					"name": "Get Users Directory",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -103,11 +101,10 @@
 								}
 							]
 						}
-					},
-					"response": []
+					}
 				},
 				{
-					"name": "Get User Details",
+					"name": "Get User Details (With Reports)",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -118,7 +115,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/api/admin/users/:id",
+							"raw": "{{BASE_URL}}/api/admin/users/{{USER_ID}}",
 							"host": [
 								"{{BASE_URL}}"
 							],
@@ -126,20 +123,37 @@
 								"api",
 								"admin",
 								"users",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "REPLACE_WITH_USER_ID"
-								}
+								"{{USER_ID}}"
 							]
 						}
-					},
-					"response": []
+					}
 				},
 				{
-					"name": "Upload CSV/Excel",
+					"name": "Download Excel Template",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{BASE_URL}}/api/admin/template",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"template"
+							]
+						}
+					}
+				},
+				{
+					"name": "Upload Initial Data (.xlsx)",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -170,8 +184,41 @@
 								"upload"
 							]
 						}
-					},
-					"response": []
+					}
+				},
+				{
+					"name": "Upload Test Results (.xlsx)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/admin/upload-test-results",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"admin",
+								"upload-test-results"
+							]
+						}
+					}
 				}
 			]
 		},
@@ -179,7 +226,7 @@
 			"name": "User",
 			"item": [
 				{
-					"name": "Get My Reports",
+					"name": "Get My Health Dashboard",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -190,18 +237,55 @@
 							}
 						],
 						"url": {
-							"raw": "{{BASE_URL}}/api/user/reports",
+							"raw": "{{BASE_URL}}/api/user/dashboard",
 							"host": [
 								"{{BASE_URL}}"
 							],
 							"path": [
 								"api",
 								"user",
-								"reports"
+								"dashboard"
 							]
 						}
-					},
-					"response": []
+					}
+				}
+			]
+		},
+		{
+			"name": "AI Integration",
+			"item": [
+				{
+					"name": "Generate AI Insights",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{TOKEN}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user\": {\n        \"name\": \"John Doe\",\n        \"age\": 35,\n        \"gender\": \"Male\",\n        \"health_condition\": \"Diabetes\",\n        \"beauty_goal\": \"Weight Loss\"\n    },\n    \"reports\": [\n        {\n            \"test_date\": \"2024-05-01\",\n            \"vitamin_d\": 15,\n            \"hba1c\": 7.5,\n            \"urine_protein\": \"Trace\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/api/insights/generate",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"api",
+								"insights",
+								"generate"
+							]
+						}
+					}
 				}
 			]
 		}
@@ -209,11 +293,13 @@
 	"variable": [
 		{
 			"key": "BASE_URL",
-			"value": "http://localhost:5000"
+			"value": "http://localhost:5000",
+			"type": "string"
 		},
 		{
 			"key": "TOKEN",
-			"value": "your_jwt_token_here"
+			"value": "YOUR_JWT_TOKEN",
+			"type": "string"
 		}
 	]
 }
